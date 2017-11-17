@@ -1,12 +1,29 @@
 <html>
-<body>
-    <canvas id="webgl-canvas"></canvas>
 
-    <script src="webgl.js"></script>
-    <script type="text/javascript">
-       let gl = WebGL.create('webgl-canvas');
-       console.log('gl', gl);
-    </script>
+<body>
+  <canvas id="webgl-canvas"></canvas>
+
+  <script src="webgl.js"></script>
+
+  <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    //precision mediump float;
+    varying vec4 vNaN;
+    attribute float aNaN;
+
+    void main() {
+      gl_FragColor = vNaN;
+    }
+  </script>
+
+
+  <script type="text/javascript">
+    const gl = WebGL.create('webgl-canvas');
+    const shaderProgram = WebGL.createShaderProgramFromScripts(
+      gl, ['2d-fragment-shader']);
+    
+    let aNaNAttr = gl.getAttribLocation(shaderProgram, 'aNaN');
+  </script>
 
 </body>
+
 </html>
