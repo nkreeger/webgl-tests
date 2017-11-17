@@ -1,7 +1,7 @@
 class WebGL {
   static create(elementID) {
     const element = document.getElementById(elementID);
-    if (!elmeent) {
+    if (!element) {
       throw 'Could not find root WebGL canvas';
     }
 
