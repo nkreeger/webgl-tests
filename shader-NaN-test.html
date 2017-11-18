@@ -5,23 +5,37 @@
 
   <script src="webgl.js"></script>
 
-  <script id="2d-fragment-shader" type="x-shader/x-fragment">
-    //precision mediump float;
-    varying vec4 vNaN;
-    attribute float aNaN;
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision highp float;
+    uniform float uNaN;
 
     void main() {
-      gl_FragColor = vNaN;
+      gl_FragColor = vec4(uNaN);
     }
   </script>
 
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    precision highp float;
+
+    attribute float aNaN;
+    varying float vNaN;
+
+    void main() {
+      vNaN = aNaN;
+      gl_Position = vec4(vNaN);
+    }
+  </script>
 
   <script type="text/javascript">
     const gl = WebGL.create('webgl-canvas');
     const shaderProgram = WebGL.createShaderProgramFromScripts(
-      gl, ['2d-fragment-shader']);
+      gl, ['fragment-shader', 'vertex-shader']);
     
-    let aNaNAttr = gl.getAttribLocation(shaderProgram, 'aNaN');
+    gl.useProgram(shaderProgram);
+
+    let uNaN = gl.getUniformLocation(shaderProgram, 'uNaN');
+    gl.uniform1f(uNaN, NaN);
+
   </script>
 
 </body>
