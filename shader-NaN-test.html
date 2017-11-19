@@ -7,10 +7,11 @@
 
   <script id="fragment-shader" type="x-shader/x-fragment">
     precision highp float;
-    uniform float uNaN;
+
+    varying float vNaN;
 
     void main() {
-      gl_FragColor = vec4(uNaN);
+      gl_FragColor = vec4(vNaN);
     }
   </script>
 
@@ -18,10 +19,11 @@
     precision highp float;
 
     attribute float aNaN;
+    uniform float uNaN;
     varying float vNaN;
 
     void main() {
-      vNaN = aNaN;
+      vNaN = aNaN * uNaN;
       gl_Position = vec4(vNaN);
     }
   </script>
@@ -36,6 +38,19 @@
     let uNaN = gl.getUniformLocation(shaderProgram, 'uNaN');
     gl.uniform1f(uNaN, NaN);
 
+    let aNaN = gl.getAttribLocation(shaderProgram, 'aNaN');
+    gl.enableVertexAttribArray(aNaN);
+
+    let vertexPositionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([NaN]), gl.STATIC_DRAW);
+
+    gl.vertexAttribPointer(aNaN, 1, gl.FLOAT, false, 0, 0);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 1);
+    console.log('uNaN', gl.getUniform(shaderProgram, uNaN));
+    // TODO - this is used for texture processing.
+    // gl.drawElements(gl.TRIANGLES, 1, gl.UNSIGNED_SHORT, 0);
   </script>
 
 </body>
